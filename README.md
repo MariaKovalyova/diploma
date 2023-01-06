@@ -2,8 +2,9 @@
 
 Приложение позволяет создавать цели — и следить за их выполнением
 
-Используемые компоненты: <br />
-**stack (python3.11, Django4.0.1, PostgreSQL15.1**<br />
+* ![version](https://img.shields.io/badge/Python-v3.10.6-informational/?style=for-the-badge&logo=Python)
+* ![version](https://img.shields.io/badge/Django-v4.0.1-informational/?style=for-the-badge&logo=Django)
+* ![version](https://img.shields.io/badge/Postgresql-v15.1-informational/?style=for-the-badge&logo=Postgresql)
 
 Проект доступен по адресу:<br />
 **myinterestingproject.online**
@@ -30,9 +31,14 @@
 <h5>3-e задание (hw35):</h5>
 1 В коде реализована регистрация;<br />
 2 Реализовано обновление (пользователя), logout и смена пароля;<br />
-3 Подключена аутентификация через VK.<br />
+4 Создан vk-токен;<br />
+3 Подключена аутентификация через VK.
 <h5>4-e задание (hw36):</h5>
+1 Написан функционал целей;<br />
+2 Написан функционал категорий;<br />
+3 Написан функцияонал комментарией.<br />
 <h5>5-e задание (hw37):</h5>
+1 Добавлена модель доски, категорий, целей и комментариев.
 <h5>6-e задание (hw38):</h5>
 1 Создан токен и настроен телеграм-бот через BotFather;<br />
 2 Написано приложение для работы телеграм-бота;<br />
