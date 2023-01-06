@@ -6,6 +6,8 @@ services:
     restart: always
     depends_on:
       - api
+    ports:
+      - "80:80"
   api:
     image: evgmid/django-project:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: always
