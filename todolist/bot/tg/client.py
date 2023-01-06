@@ -1,13 +1,13 @@
 import requests
 
-from todolist.bot.tg import schemas
+from bot.tg import schemas
 
 
 class TgClient:
     def __init__(self, token):
-        self.token = token
+        self.token: str = token
 
-    def get_url(self, method: str):
+    def get_url(self, method: str) -> str:
         return f"https://api.telegram.org/bot{self.token}/{method}"
 
     def get_updates(self, offset: int = 0, timeout: int = 60) -> schemas.GetUpdatesResponse:

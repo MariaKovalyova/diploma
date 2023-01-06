@@ -13,8 +13,9 @@ class TgUser(models.Model):
     verification_code = models.CharField(max_length=10, unique=True)
 
     def generate_verification_code(self) -> str:
-        text = string.ascii_lowercase + string.ascii_uppercase + string.digits
-        code = ''.join(random.choice(text) for i in range(10))
+        """Функция возвращает случайный код величиной 10 символов"""
+        text: str = string.ascii_lowercase + string.ascii_uppercase + string.digits
+        code: str = ''.join(random.choice(text) for i in range(10))
         self.verification_code = code
         self.save()
         return code

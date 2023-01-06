@@ -6,8 +6,6 @@ services:
     restart: always
     depends_on:
       - api
-    ports:
-      - "80:80"
   api:
     image: evgmid/django-project:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     restart: always
@@ -28,8 +26,6 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    ports:
-      - "8000:8000"
   migrations:
     image: evgmid/django-project:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     environment:
@@ -79,8 +75,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
     restart: always
-    ports:
-      - 5432:5432
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     healthcheck:

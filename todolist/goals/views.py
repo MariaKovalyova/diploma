@@ -4,10 +4,10 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDe
 from rest_framework import permissions, filters, generics
 from rest_framework.pagination import LimitOffsetPagination
 
-from .filters import GoalDateFilter
-from .models import GoalCategory, Goal, GoalComment, Board
-from .permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions, CommentPermissions
-from .serializers import GoalCategoryCreateSerializer, GoalCategorySerializer, GoalSerializer, \
+from goals.filters import GoalDateFilter
+from goals.models import GoalCategory, Goal, GoalComment, Board
+from goals.permissions import BoardPermissions, GoalCategoryPermissions, GoalPermissions, CommentPermissions
+from goals.serializers import GoalCategoryCreateSerializer, GoalCategorySerializer, GoalSerializer, \
     GoalCommentCreateSerializer, GoalCommentSerializer, GoalCreateSerializer, BoardSerializer, BoardCreateSerializer, \
     BoardListSerializer
 

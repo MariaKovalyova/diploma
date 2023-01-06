@@ -1,57 +1,37 @@
-import factory.fuzzy
+import factory
+from django.contrib.auth import get_user_model
 
-from todolist.core.models import User
-from todolist.goals.models import Board, GoalCategory, Goal, GoalComment, BoardParticipant
-
-
-class UserFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = User
-
-    username = factory.Faker('TestUser')
-    email = factory.Faker('test@mail.ru')
-    password = 'PasswordsTest123'
+from goals.models import GoalCategory, Board, BoardParticipant, Goal, GoalComment
 
 
 class BoardFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Board
 
-    title = factory.fuzzy.FuzzyText(length=25)
+    title = factory.Faker('name')
 
 
 class BoardParticipantFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BoardParticipant
 
-    board = factory.SubFactory(BoardFactory)
-    user = factory.SubFactory(UserFactory)
-
-
-class CategoryFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = GoalCategory
-
-    board = factory.SubFactory(BoardFactory)
-    title = factory.fuzzy.FuzzyText(length=10)
-    user = factory.SubFactory(UserFactory)
-
 
 class GoalFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Goal
 
-    title = factory.fuzzy.FuzzyText(length=10)
-    user = factory.SubFactory(UserFactory)
-    category = factory.SubFactory(CategoryFactory)
+    title = factory.Faker('name')
 
 
-class CommentFactory(factory.django.DjangoModelFactory):
+class GoalCategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = GoalCategory
+
+    title = factory.Faker('name')
+
+
+class GoalCommentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = GoalComment
 
-    text = factory.fuzzy.FuzzyText(length=10)
-    goal = factory.SubFactory(UserFactory)
-    user = factory.SubFactory(GoalFactory)
-
-
+    text = factory.Faker('name')

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from goals import views
 
 urlpatterns = [
     path('goal_category/create', views.GoalCategoryCreateView.as_view(), name='create_goal_category'),

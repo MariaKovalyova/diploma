@@ -1,6 +1,6 @@
 from django.db import models
 
-from todolist.core.models import User
+from core.models import User
 
 
 class Board(models.Model):

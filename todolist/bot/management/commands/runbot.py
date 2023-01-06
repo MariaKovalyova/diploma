@@ -1,12 +1,13 @@
 from datetime import datetime
+from typing import Optional
 
 from django.core.management import BaseCommand
 
-from todolist.bot.models import TgUser
-from todolist.bot.tg.client import TgClient
-from todolist.bot.tg.schemas import Message
-from todolist.todolist.settings import TG_BOT_TOKEN, HOST_URL
-from todolist.goals.models import Goal, GoalCategory
+from bot.models import TgUser
+from bot.tg.client import TgClient
+from bot.tg.schemas import Message
+from todolist.settings import TG_BOT_TOKEN, HOST_URL
+from goals.models import Goal, GoalCategory
 
 
 class Command(BaseCommand):
@@ -14,19 +15,20 @@ class Command(BaseCommand):
     tg_client = TgClient(TG_BOT_TOKEN)
     offset = 0
 
-    def choose_category(self, msg: Message, tg_user: TgUser):
+    def create_goal(self, msg: Message, tg_user: TgUser) -> None:
+        """Создание целей"""
         goal_categories = GoalCategory.objects.filter(
             board__participants__user=tg_user.user,
             is_deleted=False,
         )
-        goal_categories_str = '\n'.join(["- " + goal.title for goal in goal_categories])
+        goal_categories_str: str = '\n'.join(["- " + goal.title for goal in goal_categories])
         self.tg_client.send_message(
             chat_id=msg.chat.id,
             text=f"Выберите категорию:\n{goal_categories_str}",
         )
-        is_running = True
-        status = 0
-        category = None
+        is_running: bool = True
+        status: int = 0
+        category: Optional[GoalCategory] = None
 
         while is_running:
             res = self.tg_client.get_updates(offset=self.offset)
@@ -35,6 +37,7 @@ class Command(BaseCommand):
                 if hasattr(item, "message"):
                     try:
                         if item.message.text == "/cancel":
+                            # Отмена операции создания
                             self.tg_client.send_message(
                                 chat_id=item.message.chat.id,
                                 text="Операция отменена"
@@ -42,6 +45,7 @@ class Command(BaseCommand):
                             is_running = False
                             status = 0
                         elif status == 0 and category is None:
+                            # Ввод заголовка для создания и получение категории из бд
                             category = goal_categories.filter(title=item.message.text).first()
                             self.tg_client.send_message(
                                 chat_id=msg.chat.id,
@@ -106,7 +110,8 @@ class Command(BaseCommand):
                         is_running = False
                         status = 0
 
-    def get_goals(self, msg: Message, tg_user: TgUser):
+    def get_goals(self, msg: Message, tg_user: TgUser) -> None:
+        """Бот возвращает список целей"""
         goals = Goal.objects.filter(
             category__board__participants__user=tg_user.user,
         ).exclude(status=Goal.Status.archived)
@@ -116,7 +121,8 @@ class Command(BaseCommand):
             text=f"Список ваших целей:\n{goals_str}",
         )
 
-    def get_help(self, msg: Message):
+    def get_help(self, msg: Message) -> None:
+        """Бот отправляет сообщение о списке команд"""
         self.tg_client.send_message(
             chat_id=msg.chat.id,
             text=f"Список команд:\n"
@@ -124,16 +130,8 @@ class Command(BaseCommand):
                  f"/create # создает новую цель"
         )
 
-    def handle_unverified_user(self, msg: Message, tg_user: TgUser):
-        code = '123'
-        tg_user.verification_code = code
-        tg_user.save()
-        self.tg_client.send_message(
-            chat_id=msg.chat.id,
-            text=f' {code}'
-        )
-
-    def handle_message(self, msg: Message):
+    def handle_message(self, msg: Message) -> None:
+        """Перехват сообщений с целью использования команд"""
         tg_user, created = TgUser.objects.get_or_create(
             tg_user_id=msg.msg_from.id,
             tg_chat_id=msg.chat.id,
@@ -149,7 +147,7 @@ class Command(BaseCommand):
         elif msg.text == "/goals":
             self.get_goals(msg, tg_user)
         elif msg.text == "/create":
-            self.choose_category(msg, tg_user)
+            self.create_goal(msg, tg_user)
 
         elif msg.text == "/help":
             self.get_help(msg)
@@ -160,7 +158,7 @@ class Command(BaseCommand):
                      f"Список команд /help"
             )
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:
         while True:
             res = self.tg_client.get_updates(offset=self.offset)
             for item in res.result:

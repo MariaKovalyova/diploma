@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
-USER_MODEL = get_user_model()  # Получение модели юзера
+USER_MODEL = get_user_model()  # get User model
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -74,7 +74,7 @@ class UpdatePasswordSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         """Проверка на верность ввода старого пароля"""
-        user = attrs['user']
+        user = self.instance
         if not user.check_password(attrs['old_password']):
             raise serializers.ValidationError({'old_password': 'incorrect password'})
 

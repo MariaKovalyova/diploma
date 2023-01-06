@@ -26,7 +26,6 @@ def create_objects(apps, schema_editor):
 
             GoalCategory.objects.filter(user=user).update(board=new_board)
 
-
 class Migration(migrations.Migration):
 
     dependencies = [

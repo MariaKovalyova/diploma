@@ -2,13 +2,14 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from todolist.bot.models import TgUser
-from todolist.bot.serializers import TgUserSerializer
-from todolist.bot.tg.client import TgClient
-from todolist.todolist.settings import TG_BOT_TOKEN
+from bot.models import TgUser
+from bot.serializers import TgUserSerializer
+from bot.tg.client import TgClient
+from todolist.settings import TG_BOT_TOKEN
 
 
 class BotVerifyView(generics.UpdateAPIView):
+    """Вьюшка для связи бота с пользователем"""
     model = TgUser
     permission_classes = [IsAuthenticated]
     http_method_names = ['patch']
